@@ -39,26 +39,6 @@ import com.pocketlooplab.ui.theme.PocketLoopLabTheme
 
 @Composable
 fun PocketLoopLabScreen(
-    state: PocketLoopLabUiState,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(AppColors.background, AppColors.surfaceDark)))
-            .semantics { contentDescription = "Pocket Loop Lab locked mockup static shell" },
-        contentPadding = PaddingValues(18.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item { Header(state) }
-        item { SurfaceSection(state) }
-        item { TransportPanel(state.transport, Modifier.fillMaxWidth()) }
-        item { PadEditSheet(state.editSheet, Modifier.fillMaxWidth()) }
-    }
-}
-
-@Composable
-fun PocketLoopLabScreen(
     viewModel: PocketLoopLabViewModel,
     modifier: Modifier = Modifier,
     onRequestPermission: () -> Unit = {}

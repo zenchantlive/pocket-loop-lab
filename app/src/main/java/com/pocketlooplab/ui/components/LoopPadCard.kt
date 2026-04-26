@@ -20,7 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +41,6 @@ import com.pocketlooplab.model.LoopPadUiModel
 import com.pocketlooplab.model.WaveformBar
 import com.pocketlooplab.model.WaveformColorRole
 import com.pocketlooplab.model.toColor
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -71,6 +70,8 @@ fun LoopPadCard(
         listOf(ColorPanelLight, ColorPanelDark)
     )
 
+    val scope = rememberCoroutineScope()
+
     // Track press state for gesture handling
     var isPressed by remember { mutableStateOf(false) }
 
@@ -82,7 +83,7 @@ fun LoopPadCard(
             .border(2.dp, borderColor, RoundedCornerShape(28.dp))
             .padding(16.dp)
             .pointerInput(Unit) {
-                coroutineScope {
+                scope.launch {
                     awaitEachGesture {
                         val down = awaitFirstDown(requireUnconsumed = false)
                         isPressed = true

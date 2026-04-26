@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pocketlooplab.model.PadEditUiModel
 import com.pocketlooplab.model.PlaybackSpeed
+import com.pocketlooplab.ui.theme.AppColors
 
 private val ColorSheetBg = Color(0xFF1A232E)
 private val ColorSheetBorder = Color(0xFF384556)
@@ -64,23 +65,23 @@ fun PadEditSheet(
         AlertDialog(
             onDismissRequest = { showClearConfirm = false },
             title = { Text("Clear this loop?", color = Color.White) },
-            text = { Text("This cannot be undone.", color = ColorTextSecondary) },
+            text = { Text("This cannot be undone.", color = AppColors.textSecondary) },
             confirmButton = {
                 TextButton(onClick = {
                     showClearConfirm = false
                     selectedPadId?.let { onClear(it) }
                 }) {
-                    Text("Clear", color = ColorRed)
+                    Text("Clear", color = AppColors.red)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showClearConfirm = false }) {
-                    Text("Cancel", color = ColorTextPrimary)
+                    Text("Cancel", color = AppColors.textPrimary)
                 }
             },
             containerColor = Color(0xFF1A232E),
             titleContentColor = Color.White,
-            textContentColor = ColorTextSecondary
+            textContentColor = AppColors.textSecondary
         )
     }
 
