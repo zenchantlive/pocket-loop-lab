@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -35,6 +34,7 @@ import com.pocketlooplab.state.PocketLoopLabViewModel
 import com.pocketlooplab.ui.components.LoopPadCard
 import com.pocketlooplab.ui.components.PadEditSheet
 import com.pocketlooplab.ui.components.TransportPanel
+import com.pocketlooplab.ui.theme.AppColors
 import com.pocketlooplab.ui.theme.PocketLoopLabTheme
 
 @Composable
@@ -42,12 +42,10 @@ fun PocketLoopLabScreen(
     state: PocketLoopLabUiState,
     modifier: Modifier = Modifier
 ) {
-    // For static preview/test, fall back to ReferenceStates when no ViewModel is available
-    // In actual app usage, the ViewModel-wired version below would be used
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(Color(0xFF0B0F14), Color(0xFF111A22))))
+            .background(Brush.verticalGradient(listOf(AppColors.background, AppColors.surfaceDark)))
             .semantics { contentDescription = "Pocket Loop Lab locked mockup static shell" },
         contentPadding = PaddingValues(18.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -59,10 +57,6 @@ fun PocketLoopLabScreen(
     }
 }
 
-/**
- * ViewModel-wired version of PocketLoopLabScreen.
- * Uses the PocketLoopLabViewModel to manage state and handle user interactions.
- */
 @Composable
 fun PocketLoopLabScreen(
     viewModel: PocketLoopLabViewModel,
@@ -77,7 +71,7 @@ fun PocketLoopLabScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(Color(0xFF0B0F14), Color(0xFF111A22))))
+            .background(Brush.verticalGradient(listOf(AppColors.background, AppColors.surfaceDark)))
             .semantics { contentDescription = "Pocket Loop Lab" },
         contentPadding = PaddingValues(18.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -116,36 +110,32 @@ fun PocketLoopLabScreen(
 @Composable
 private fun ViewModelHeader() {
     Column(Modifier.fillMaxWidth()) {
-        Text("Pocket recorder / loop station", color = Color(0xFF8C9AA7), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+        Text("Pocket recorder / loop station", color = AppColors.textMuted, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
         Text("Pocket Loop Lab", color = Color.White, fontSize = 34.sp, fontWeight = FontWeight.Black)
     }
 }
 
-/**
- * Permission rationale banner — shown when RECORD_AUDIO permission is not granted.
- * Tapping the banner triggers the system permission request.
- */
 @Composable
 private fun PermissionBanner(onRequestPermission: () -> Unit) {
-    androidx.compose.foundation.layout.Column(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF2A1A1A))
-            .border(1.dp, Color(0xFFFF5A66), RoundedCornerShape(16.dp))
+            .background(AppColors.bannerBg)
+            .border(1.dp, AppColors.red, RoundedCornerShape(16.dp))
             .clickable { onRequestPermission() }
             .padding(16.dp)
     ) {
-        Text("🎤 Mic access required", color = Color(0xFFFF5A66), fontSize = 14.sp, fontWeight = FontWeight.Bold)
+        Text("🎤 Mic access required", color = AppColors.red, fontSize = 14.sp, fontWeight = FontWeight.Bold)
         Text(
             "Hold any pad to start recording a loop.",
-            color = Color(0xFFB8C4CC),
+            color = AppColors.textSecondary,
             fontSize = 13.sp,
             modifier = Modifier.padding(top = 4.dp)
         )
         Text(
             "Tap to grant permission →",
-            color = Color(0xFF5BE6C7),
+            color = AppColors.mint,
             fontSize = 12.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(top = 6.dp)
@@ -163,15 +153,15 @@ private fun ViewModelSurfaceSection(
         Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(34.dp))
-            .background(Color(0xFF131B24))
+            .background(AppColors.surface)
             .padding(16.dp)
     ) {
         Row(Modifier.fillMaxWidth()) {
-            Text("Live Lab Surface", color = Color(0xFFEAF2F5), fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
+            Text("Live Lab Surface", color = AppColors.textPrimary, fontSize = 22.sp, fontWeight = FontWeight.ExtraBold)
             Spacer(Modifier.weight(1f))
             Column {
-                Text("0m 0s", color = Color(0xFFFFD166), fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                Text("LoFi", color = Color(0xFF5BE6C7), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Text("0m 0s", color = AppColors.amber, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Text("LoFi", color = AppColors.mint, fontSize = 12.sp, fontWeight = FontWeight.Bold)
             }
         }
         Spacer(Modifier.height(14.dp))
