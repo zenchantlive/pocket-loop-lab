@@ -41,7 +41,6 @@ import com.pocketlooplab.model.LoopPadUiModel
 import com.pocketlooplab.model.WaveformBar
 import com.pocketlooplab.model.WaveformColorRole
 import com.pocketlooplab.model.toColor
-import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
@@ -258,7 +257,7 @@ private fun TooLoudBadge() {
 private fun CuePill(text: String, color: Color) {
     Text(
         text = text,
-        color = MaterialTheme.colorScheme.background,
+        color = Color.White,
         fontSize = 11.sp,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.clip(RoundedCornerShape(50)).background(color).padding(horizontal = 9.dp, vertical = 4.dp)

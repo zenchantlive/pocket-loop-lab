@@ -9,6 +9,7 @@ import com.pocketlooplab.model.LoopPadStatus
 import com.pocketlooplab.model.PlaybackSpeed
 import com.pocketlooplab.model.WaveformBar
 import com.pocketlooplab.model.WaveformColorRole
+import kotlin.math.pow
 import java.io.File
 
 /**
@@ -193,7 +194,7 @@ class AndroidLoopAudioEngine(private val context: Context) : LoopAudioEngine {
         pads[padId]?.let { pad ->
             pad.currentVolumeDb = volumeDb
             // MediaPlayer volume: 0.0..1.0 (dB to linear: 10^(dB/20))
-            val linear = if (volumeDb <= -80f) 0f else 10f.pow(volumeDb / 20f)
+            val linear = if (volumeDb <= -80f) 0f else pow(10.0, volumeDb.toDouble() / 20.0).toFloat()
             pad.player?.setVolume(linear, linear)
             println("[AndroidAudio] pad $padId: setVolume ${volumeDb}dB → linear=$linear")
         }
