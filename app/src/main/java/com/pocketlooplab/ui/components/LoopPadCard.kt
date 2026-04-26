@@ -2,7 +2,9 @@ package com.pocketlooplab.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,7 +41,10 @@ import com.pocketlooplab.model.LoopPadUiModel
 import com.pocketlooplab.model.WaveformBar
 import com.pocketlooplab.model.WaveformColorRole
 import com.pocketlooplab.model.toColor
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 // Color constants per PRD
 private val ColorMint = Color(0xFF5BE6C7)
@@ -78,17 +83,36 @@ fun LoopPadCard(
             .border(2.dp, borderColor, RoundedCornerShape(28.dp))
             .padding(16.dp)
             .pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = { offset ->
+                coroutineScope {
+                    awaitEachGesture {
+                        val down = awaitFirstDown(requireUnconsumed = false)
                         isPressed = true
                         onPress()
-                        tryAwaitReleased()
+                        // Long-press fires after 500ms if the user doesn't release
+                        var longPressed = false
+                        val longPressJob = launch {
+                            withTimeoutOrNull(500L) {
+                                // Wait for the down event to be consumed (long-press triggered)
+                                // We detect long-press by waiting 500ms without cancel
+                                try {
+                                    awaitFirstDown(requireUnconsumed = true)
+                                } catch (_: Exception) {
+                                    // Expected: no second down during long-press detection window
+                                }
+                            }
+                            // If we get here without the gesture being cancelled, it was a long-press
+                            longPressed = true
+                            onLongPress()
+                        }
+                        val up = waitForUpOrCancellation()
+                        longPressJob.cancel()
                         isPressed = false
                         onRelease()
-                    },
-                    onTap = { onTap() },
-                    onLongPress = { onLongPress() }
-                )
+                        if (up != null && !longPressed) {
+                            onTap()
+                        }
+                    }
+                }
             },
         verticalArrangement = Arrangement.SpaceBetween
     ) {

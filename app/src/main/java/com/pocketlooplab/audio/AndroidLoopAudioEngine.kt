@@ -193,7 +193,7 @@ class AndroidLoopAudioEngine(private val context: Context) : LoopAudioEngine {
         pads[padId]?.let { pad ->
             pad.currentVolumeDb = volumeDb
             // MediaPlayer volume: 0.0..1.0 (dB to linear: 10^(dB/20))
-            val linear = if (volumeDb <= -80f) 0f else kotlin.math.pow(10f, volumeDb / 20f).toFloat()
+            val linear = if (volumeDb <= -80f) 0f else 10f.pow(volumeDb / 20f)
             pad.player?.setVolume(linear, linear)
             println("[AndroidAudio] pad $padId: setVolume ${volumeDb}dB → linear=$linear")
         }
@@ -291,7 +291,7 @@ class AndroidLoopAudioEngine(private val context: Context) : LoopAudioEngine {
 
     private fun generatePlaceholderWaveform(role: WaveformColorRole): List<WaveformBar> {
         // 10-bar placeholder representing recorded audio
-        listOf(0.3f, 0.65f, 0.45f, 0.8f, 0.55f, 0.9f, 0.4f, 0.7f, 0.6f, 0.75f)
+        return listOf(0.3f, 0.65f, 0.45f, 0.8f, 0.55f, 0.9f, 0.4f, 0.7f, 0.6f, 0.75f)
             .map { WaveformBar(it, role) }
     }
 
