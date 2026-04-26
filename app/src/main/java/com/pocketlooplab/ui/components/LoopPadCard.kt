@@ -2,9 +2,7 @@ package com.pocketlooplab.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,8 +39,6 @@ import com.pocketlooplab.model.LoopPadUiModel
 import com.pocketlooplab.model.WaveformBar
 import com.pocketlooplab.model.WaveformColorRole
 import com.pocketlooplab.model.toColor
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 
 // Color constants per PRD
 private val ColorMint = Color(0xFF5BE6C7)
@@ -70,11 +66,6 @@ fun LoopPadCard(
         listOf(ColorPanelLight, ColorPanelDark)
     )
 
-    val scope = rememberCoroutineScope()
-
-    // Track press state for gesture handling
-    var isPressed by remember { mutableStateOf(false) }
-
     Column(
         modifier = modifier
             .semantics { contentDescription = "${pad.title} ${pad.status.label} ${pad.actionLabel}" }
@@ -83,38 +74,20 @@ fun LoopPadCard(
             .border(2.dp, borderColor, RoundedCornerShape(28.dp))
             .padding(16.dp)
             .pointerInput(Unit) {
-                scope.launch {
-                    awaitEachGesture {
-                        val down = awaitFirstDown(requireUnconsumed = false)
-                        isPressed = true
+                detectTapGestures(
+                    onPress = { _ ->
                         onPress()
-                        // Long-press fires after 500ms if the user doesn't release
-                        var longPressed = false
-                        val longPressJob = launch {
-                            withTimeoutOrNull(500L) {
-                                // Wait for the down event to be consumed (long-press triggered)
-                                // We detect long-press by waiting 500ms without cancel
-                                try {
-                                    awaitFirstDown(requireUnconsumed = true)
-                                } catch (_: Exception) {
-                                    // Expected: no second down during long-press detection window
-                                }
-                            }
-                            // If we get here without the gesture being cancelled, it was a long-press
-                            longPressed = true
-                            onLongPress()
-                        }
-                        val up = waitForUpOrCancellation()
-                        longPressJob.cancel()
-                        isPressed = false
+                    },
+                    onTap = {
+                        onTap()
                         onRelease()
-                        if (up != null && !longPressed) {
-                            onTap()
-                        }
+                    },
+                    onLongPress = { _ ->
+                        onLongPress()
+                        onRelease()
                     }
-                }
-            },
-        verticalArrangement = Arrangement.SpaceBetween
+                )
+            }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Text(pad.title, color = ColorTextPrimary, fontSize = 20.sp, fontWeight = FontWeight.Bold)

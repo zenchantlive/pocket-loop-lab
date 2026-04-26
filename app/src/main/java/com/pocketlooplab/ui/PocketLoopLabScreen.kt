@@ -215,6 +215,7 @@ private fun buildPadEditUiModel(padId: Int, pads: List<com.pocketlooplab.model.L
 @Composable
 private fun PocketLoopLabScreenPreview() {
     PocketLoopLabTheme {
-        PocketLoopLabScreen(androidx.compose.foundation.layout.Box {})
+        // Placeholder — state and viewmodel required for full preview
+        Box(modifier = Modifier.fillMaxSize())
     }
 }
