@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Pocket Loop Lab — Slice 0 Preview Harness</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="phone" aria-label="Pocket Loop Lab preview placeholder">
+    <header class="app-header">
+      <p class="eyebrow">Pocket recorder / loop station</p>
+      <h1>Pocket Loop Lab</h1>
+    </header>
+
+    <section class="surface" aria-labelledby="surface-title">
+      <div class="section-row">
+        <h2 id="surface-title">Live Lab Surface</h2>
+        <div class="session-meta"><span>12h 0m 28s</span><strong>LoFi</strong></div>
+      </div>
+
+      <div class="pad-grid">
+        <article class="pad selected"><span class="pad-title">Pad 1</span><div class="orb mint">Playing</div><small>Selected loop</small></article>
+        <article class="pad recording"><span class="pad-title">Pad 2</span><div class="orb red">Layering</div><small>Overdub armed</small></article>
+        <article class="pad empty"><span class="pad-title">Pad 3</span><div class="orb dark">Empty</div><small>Hold to Record</small></article>
+        <article class="pad empty"><span class="pad-title">Pad 4</span><div class="orb dark">Empty</div><small>Hold to record</small></article>
+      </div>
+    </section>
+
+    <section class="transport" aria-label="Transport controls">
+      <h2>Transport</h2>
+      <div class="transport-row"><button>Play</button><button>Stop</button><button>Clear Selected</button></div>
+      <div class="meter"><span></span></div>
+    </section>
+
+    <section class="edit-sheet" aria-label="Pad 1 Edit Sheet">
+      <h2>Pad 1 Edit Sheet</h2>
+      <div class="waveform"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="controls"><span>Trim</span><span>Volume 0 dB</span><span>Speed 1x</span><span>Reverse</span><span>Overdub</span><span>Clear</span></div>
+    </section>
+  </main>
+</body>
+</html>

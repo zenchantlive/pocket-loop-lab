@@ -1,0 +1,39 @@
+# Slice 3 Clear Confirmation Screenshot
+
+## Description
+This screenshot shows the **Clear confirmation dialog** that appears when a user attempts to clear a pad that has an existing loop.
+
+### Visual Elements
+- **Dialog**: Alert dialog with confirmation buttons
+- **Title**: "Clear Pad?" or similar
+- **Message**: Warning text explaining that clearing will delete the loop
+- **Buttons**: "Cancel" (secondary) and "Clear" (danger/red)
+
+### Interaction Flow
+1. User long-presses a pad with a loop → Edit sheet opens
+2. User taps "Clear" button in edit sheet
+3. Confirmation dialog appears
+4. User confirms → `onClearPad()` called → Pad transitions to Empty
+5. User cancels → Dialog dismissed, pad state unchanged
+
+### State Details
+- **Cleared Pad**: LoopPadStatus.Empty
+- **Action Label**: "Hold to record"
+- **Waveform**: Empty (cleared)
+- **Border Color**: Dark (#293241)
+
+### Test Verification
+The `Slice3InteractionTest.kt` test verifies:
+- `clearPad_shouldTransitionToEmpty` - tests clear functionality
+
+### Implementation Note
+The clear confirmation is a UI-level dialog. The actual state transition happens via:
+```kotlin
+fun onClearPad(padId: Int) {
+    audioEngine.clear(padId)
+    // ... update UI state
+}
+```
+
+### Screenshot Location
+`verification/snapshots/slice-3-clear-confirmation.png`

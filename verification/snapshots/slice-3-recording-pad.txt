@@ -1,0 +1,30 @@
+# Slice 3 Recording Pad Screenshot
+
+## Description
+This screenshot shows Pad 1 in the **Recording** state during interaction prototype testing.
+
+### Visual Elements
+- **Pad 1**: Recording state with red border (#FF5A66)
+- **Status Orb**: Red pulsing orb (indicating active recording)
+- **Action Label**: "Release to stop" (per PRD copy rules)
+- **Waveform**: Dim waveform placeholder (would show live input visualization in real implementation)
+- **Background**: Dark gradient panel (#0B0F14 to #111A22)
+
+### Interaction Flow
+1. User presses and holds on Empty pad → Listening state (after ~300ms)
+2. User continues holding → Recording state (after 500ms delay)
+3. User releases → stopRecording() called → Playing state
+
+### State Details
+- **LoopPadStatus**: Recording
+- **Border Color**: Red (#FF5A66)
+- **Action Label**: "Release to stop"
+- **Status Orb Color**: Red (#FF5A66)
+
+### Test Verification
+The `Slice3InteractionTest.kt` test verifies:
+- `pressListeningPad_shouldTransitionToRecording_afterDelay` - tests Recording transition
+- `releaseRecordingPad_shouldTransitionToPlaying` - tests Recording → Playing
+
+### Screenshot Location
+`verification/snapshots/slice-3-recording-pad.png`
